@@ -1,0 +1,78 @@
+<html>
+<head>
+	<title>Repeat: Recursive Tree</title>
+	<meta name="author" content="David Wicks"/>
+	<link rel="stylesheet" href="../styles/f+c.css"/>
+	<!-- Date: 2011-02-20 -->
+	<script>
+	var angleOffsetA = radians(1.5);
+	var angleOffsetB = radians(50);
+	
+	function draw(){
+		var canvas = document.getElementById("repeat");
+		if( canvas.getContext ){
+			var ctx = canvas.getContext('2d');
+			var margin = 50;
+			var w = canvas.width;
+			var h = canvas.height;
+			ctx.clearRect( 0, 0, w, h );
+			ctx.strokeStyle = "#F597B0";
+			ctx.fillStyle = "#F597B0";
+			
+			var dotSize = 9;
+			seed1( ctx, dotSize, radians(270), w/2.0, h );
+			
+		} else {
+			alert("Sorry, your browser doesn't support canvas.");
+		}
+	}
+	function seed1(ctx, dotSize, angle, x, y){
+		if(dotSize > 1.0){
+			ctx.beginPath();
+			ctx.arc(x, y, dotSize/2.0, 0, Math.PI*2);
+			ctx.fill();
+			var r = Math.random()*1.0;
+			if(r > 0.02){
+				var newx = x + Math.cos(angle)*dotSize;
+				var newy = y + Math.sin(angle)*dotSize;
+				seed1(ctx, dotSize * 0.99, angle - angleOffsetA, newx, newy);
+			} else {
+				var newx = x + Math.cos(angle);
+				var newy = y + Math.sin(angle);
+				seed2(ctx, dotSize * 0.99, angle + angleOffsetA, newx, newy);
+				seed1(ctx, dotSize * 0.60, angle + angleOffsetB, newx, newy);
+				seed2(ctx, dotSize * 0.50, angle - angleOffsetB, newx, newy);
+			}
+		}
+	}
+	function seed2(ctx, dotSize, angle, x, y){
+		if(dotSize > 1.0){
+			ctx.beginPath();
+			ctx.arc(x, y, dotSize/2.0, 0, Math.PI*2);
+			ctx.fill();
+			
+			var r = Math.random()*1.0;
+			if(r > 0.05){
+				var newx = x + Math.cos(angle)*dotSize;
+				var newy = y + Math.sin(angle)*dotSize;
+				seed2(ctx, dotSize * 0.99, angle + angleOffsetA, newx, newy);
+			} else {
+				var newx = x + Math.cos(angle);
+				var newy = y + Math.sin(angle);
+				seed1(ctx, dotSize * 0.99, angle + angleOffsetA, newx, newy);
+				seed2(ctx, dotSize * 0.60, angle + angleOffsetB, newx, newy);
+				seed1(ctx, dotSize * 0.50, angle - angleOffsetB, newx, newy);
+			}
+		}
+	}
+	function radians(angle){ return angle*Math.PI/180.0; }
+	</script>
+</head>
+<body onload="draw();">
+	<h1>Form+Code: Recursive Tree</h1>
+	<p>For more information, visit the <a href="http://formandcode.com/code-examples/repeat-recursive-tree">Form+Code website</a>.</p>
+	<p>Click to generate a new tree.</p>
+	<canvas id="repeat" width="900" height="600" onclick="draw();">
+	</canvas>
+</body>
+</html>
