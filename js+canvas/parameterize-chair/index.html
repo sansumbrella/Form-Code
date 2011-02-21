@@ -1,0 +1,144 @@
+<html>
+<head>
+	<title>Parameterize: Chair</title>
+	<meta name="author" content="David Wicks"/>
+	<link rel="stylesheet" href="../styles/f+c.css"/>
+	<script type="text/javascript" src="../three.js/Three.js"></script>
+	<script type="text/javascript" src="../three.js/Cube.js"></script>
+	<!-- Date: 2011-02-20 -->
+	<script>
+	function init(){
+		var camera, scene, renderer;
+		var width=960;
+		var height=540;
+		var formAndColor=0xF597B0;
+		var rotation = 0;
+		var targetRotation = 0;
+		var targetDistance = 500;
+		var targetRotationOnMouseDown;
+		var mouseX, mouseXOnMouseDown;
+		
+		var chairSeatHeight, chairWidth, chairDepth, chairBackHeight, chairFrameThickness;
+		
+		setup();
+		setInterval(loop, 1000/60);
+		
+
+		function setup(){
+			camera = new THREE.Camera( 75, width/height, 1, 10000 );
+			camera.position.z = targetDistance;
+			camera.position.y = 50;
+			scene = new THREE.Scene();
+			
+			var rows = 2;
+			var rowWidth = 4;
+			var cellSize = 220;
+			for( var i=0; i < rows; i++ )
+			{
+				for( var j=0; j < rowWidth; j++ )
+				{
+					scrambleChair();
+					addChair({x: -(rowWidth*cellSize/2 - cellSize*0.5) + j * cellSize, y:0,z: -(rows*cellSize/2) + i * cellSize});
+				}
+				
+			}
+			
+			renderer = new THREE.CanvasRenderer();
+			renderer.setSize( width, height );
+			document.body.appendChild(renderer.domElement);
+			document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+		}
+
+		function loop(){
+			//update camera
+			rotation += (targetRotation-rotation) * 0.1;
+			camera.position.x = Math.sin(rotation) * targetDistance;
+			camera.position.z = Math.cos(rotation) * targetDistance;
+			renderer.render(scene, camera);
+		}
+		
+		function addChair( translation ){
+			var materials = [];
+			for( var i=0; i<6; i++ ){
+				materials.push( [new THREE.MeshBasicMaterial( { color: formAndColor } )] );
+			}
+			// back
+			cube = new THREE.Mesh( new Cube( chairWidth, chairBackHeight, chairFrameThickness, 1, 1, materials ), new THREE.MeshFaceMaterial() );
+			cube.position.x = translation.x + 0;
+			cube.position.y = translation.y + 0;
+			cube.position.z = translation.z + 0;
+			cube.overdraw = true;
+			scene.addObject( cube );
+
+		  // seat
+			cube = new THREE.Mesh( new Cube( chairWidth, chairFrameThickness, chairDepth, 1, 1, materials ), new THREE.MeshFaceMaterial() );
+			cube.position.x = translation.x + 0;
+			cube.position.y = translation.y + -( chairBackHeight/2 + chairFrameThickness/2 );
+			cube.position.z = translation.z + chairDepth/2 - chairFrameThickness/2;
+			cube.overdraw = true;
+			scene.addObject( cube );
+
+
+		  // legs
+			cube = new THREE.Mesh( new Cube( chairFrameThickness, chairSeatHeight, chairFrameThickness, 1, 1, materials ), new THREE.MeshFaceMaterial() );
+			cube.position.x = translation.x + (chairFrameThickness - chairWidth)/2;
+			cube.position.y = translation.y + -(chairBackHeight/2 + chairSeatHeight/2 + chairFrameThickness);
+			cube.position.z = translation.z + 0;
+			cube.overdraw = true;
+			scene.addObject( cube );
+
+			cube = new THREE.Mesh( new Cube( chairFrameThickness, chairSeatHeight, chairFrameThickness, 1, 1, materials ), new THREE.MeshFaceMaterial() );
+			cube.position.x = translation.x + (chairWidth - chairFrameThickness)/2;
+			cube.position.y = translation.y + -(chairBackHeight/2 + chairSeatHeight/2 + chairFrameThickness);
+			cube.position.z = translation.z + 0;
+			cube.overdraw = true;
+			scene.addObject( cube );
+			
+			cube = new THREE.Mesh( new Cube( chairFrameThickness, chairSeatHeight, chairFrameThickness, 1, 1, materials ), new THREE.MeshFaceMaterial() );
+			cube.position.x = translation.x + (chairWidth - chairFrameThickness)/2;
+			cube.position.y = translation.y + -(chairBackHeight/2 + chairSeatHeight/2 + chairFrameThickness);
+			cube.position.z = translation.z + chairDepth - chairFrameThickness;
+			cube.overdraw = true;
+			scene.addObject( cube );
+			
+			cube = new THREE.Mesh( new Cube( chairFrameThickness, chairSeatHeight, chairFrameThickness, 1, 1, materials ), new THREE.MeshFaceMaterial() );
+			cube.position.x = translation.x + (chairFrameThickness - chairWidth)/2;
+			cube.position.y = translation.y + -(chairBackHeight/2 + chairSeatHeight/2 + chairFrameThickness);
+			cube.position.z = translation.z + chairDepth - chairFrameThickness;
+			cube.overdraw = true;
+			scene.addObject( cube );
+		}
+		
+		function scrambleChair(){
+			chairBackHeight = 20 + Math.floor(Math.random()*180);
+			chairDepth = 20 + Math.floor(Math.random()*180);
+			chairWidth = 20 + Math.floor(Math.random()*180);
+			chairSeatHeight = 20 + Math.floor(Math.random()*180);
+			chairFrameThickness = 10;
+		}
+		
+		function onDocumentMouseDown(event){
+			document.addEventListener('mousemove', onDocumentMouseMove, false);
+			document.addEventListener('mouseup', onDocumentMouseUp, false);
+			mouseX = mouseXOnMouseDown = event.clientX - window.innerWidth/2;
+			targetRotationOnMouseDown = targetRotation;
+		}
+		
+		function onDocumentMouseMove(event){
+			mouseX = event.clientX - window.innerWidth/2;
+			targetRotation = targetRotationOnMouseDown + (mouseX - mouseXOnMouseDown)*0.01;
+		}
+		
+		function onDocumentMouseUp(event){
+			document.removeEventListener('mousemove', onDocumentMouseMove, false);
+			document.removeEventListener('mouseup', onDocumentMouseUp, false);
+		}
+	}
+	
+	</script>
+</head>
+<body onload="init();">
+	<h1>Form+Code: Parameterize Chair</h1>
+	<p>For more information, visit the <a href="http://formandcode.com/code-examples/">Form+Code website</a>.</p>
+</body>
+</html>
