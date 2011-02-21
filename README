@@ -2,3 +2,10 @@ Form+Code
 Implementations of code from Form+Code, a book by Casey Reas, Chandler McWilliams, and LUST
 Original code in Processing here:
 http://formandcode.com/code-examples/
+
+Javascript/Canvas resources:
+API reference: http://simon.html5.org/dump/html5-canvas-cheat-sheet.html
+Mozilla Tutorial: https://developer.mozilla.org/en/Canvas_tutorial
+
+Cinder:
+http://libcinder.org/
