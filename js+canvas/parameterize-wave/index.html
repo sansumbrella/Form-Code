@@ -4,10 +4,7 @@
 	<meta name="author" content="David Wicks"/>
 	<link rel="stylesheet" href="../styles/f+c.css"/>
 	<!-- Date: 2011-02-20 -->
-	<script>
-	var angleOffsetA = radians(1.5);
-	var angleOffsetB = radians(50);
-	
+	<script>	
 	function draw(){
 		var canvas = document.getElementById("repeat");
 		if( canvas.getContext ){
@@ -50,7 +47,6 @@
 			alert("Sorry, your browser doesn't support canvas.");
 		}
 	}
-	function radians(angle){ return angle*Math.PI/180.0; }
 	</script>
 </head>
 <body onload="draw();">
