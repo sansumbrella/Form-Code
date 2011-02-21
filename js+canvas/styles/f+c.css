@@ -22,3 +22,10 @@ a{
 canvas{
 	border:1px dashed #8c5765;
 }
+.comment{
+	color:#7E7E7E;
+}
+em{
+	font-style:normal;
+	text-decoration:underline;
+}
